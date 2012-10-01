@@ -10,6 +10,8 @@ package ssamot.utilities;
 
 import java.util.Arrays;
 
+import javax.smartcardio.Card;
+
 public class ArraysCopy {
     public static void multiArrayCopy(int[][] source, int[][] destination) {
         for (int a = 0; a < source.length; a++) {
@@ -41,6 +43,15 @@ public class ArraysCopy {
     
     public static int[] fastShallowArrayCopy(int[] oldArray) {
         int[] rt = new int[oldArray.length];
+        for (int i = 0; i < oldArray.length; i++) {
+            rt[i] = oldArray[i];
+        }
+        
+        return rt;
+    }
+    
+    public static Card[] fastShallowArrayCopy(Card[] oldArray) {
+        Card[] rt = new Card[oldArray.length];
         for (int i = 0; i < oldArray.length; i++) {
             rt[i] = oldArray[i];
         }
@@ -90,6 +101,13 @@ public class ArraysCopy {
         }
     }
     
+    public static void multiArrayCopy(Card[][] source, Card[][] destination) {
+        for (int a = 0; a < source.length; a++) {
+            System.arraycopy(source[a], 0, destination[a], 0, source[a].length);
+        }
+    }
+    
+    
     public static double[] flattenTwoDArray(float[][] twodArray, double[] senses,  int startPosition) {
         int newArrayLength = twodArray[0].length*(twodArray.length-startPosition + senses.length);
         double[] flattendArray = new double[newArrayLength];
@@ -129,5 +147,7 @@ public class ArraysCopy {
   	  System.arraycopy(second, 0, result, first.length, second.length);
   	  return result;
   }
+
+	
     
 }

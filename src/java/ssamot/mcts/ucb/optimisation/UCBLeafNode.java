@@ -40,11 +40,6 @@ public class UCBLeafNode extends StatisticsNode {
 		return 0;
 	}
 
-	@Override
-	public void runDefaultPolicy() {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public double evaluateDefaultPolicy(int player) {

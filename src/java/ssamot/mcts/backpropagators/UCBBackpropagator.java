@@ -10,6 +10,7 @@ public class UCBBackpropagator<T extends StatisticsNode>implements Backpropagato
 	@Override
 	public void backpropagate(List<T> nodes, List<Double> reward) {
 		// TODO Auto-generated method stub
+		//System.exit(0);
 		//System.out.println(reward);
 		int nodeSize = nodes.size();
 

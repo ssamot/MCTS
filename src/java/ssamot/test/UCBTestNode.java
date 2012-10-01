@@ -90,11 +90,7 @@ public class UCBTestNode extends StatisticsNode {
 		return 2;
 	}
 
-	@Override
-	public void runDefaultPolicy() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public double evaluateDefaultPolicy(int player) {

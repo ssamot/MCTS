@@ -50,6 +50,8 @@ public class MCTS<N extends MCTSNode> {
 	private int treePolicyMaxTreeDepth = 3000;
 	private boolean enableDefaultPolicy = false;
 
+	
+
 	private Selector<N> chanceNodeSelector;
 	private Selector<N> deterministicNodeSelector;;
 	private Selector<N> actionSelector;
@@ -89,6 +91,14 @@ public class MCTS<N extends MCTSNode> {
 		this.backpropagator = backpropagator;
 	}
 
+	public boolean shouldEnableDefaultPolicy() {
+		return enableDefaultPolicy;
+	}
+
+	public void enableDefaultPolicy(boolean enableDefaultPolicy) {
+		this.enableDefaultPolicy = enableDefaultPolicy;
+	}
+	
 	public N getRootNode() {
 		return rootNode;
 	}
@@ -147,7 +157,9 @@ public class MCTS<N extends MCTSNode> {
 				ElapsedCpuTimer.TimerType.WALL_TIME);
 
 		int totalSimulations = 0;
+		
 		for (; totalSimulations < simulations; totalSimulations++) {
+			//System.err.println(totalSimulations);
 			playOneSequence(rootNode);
 		}
 		
@@ -191,7 +203,7 @@ public class MCTS<N extends MCTSNode> {
 			}
 
 			
-			if (node.canBeEvaluated() && enableDefaultPolicy
+			if (!node.canBeEvaluated() && enableDefaultPolicy
 					&& node.isFirstTime() ) {
 				//System.out.println(node.canBeEvaluated() + " " +  enableDefaultPolicy + " " + node.isFirstTime() + depth);
 				break;
@@ -204,7 +216,7 @@ public class MCTS<N extends MCTSNode> {
 			}
 		}
 		List<Double> reward = null;
-		if(node.isFirstTime() && enableDefaultPolicy) {
+		if(!node.canBeEvaluated() && node.isFirstTime() && enableDefaultPolicy) {
 			
 			reward = node.evaluateDefaultPolicy();
 			node.setFirstTime(false);

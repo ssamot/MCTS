@@ -64,7 +64,7 @@ public abstract class MCTSNode<T> {
 
 	public abstract double evaluate(int player);
 	
-	public abstract void runDefaultPolicy();
+	//public abstract void runDefaultPolicy();
 	
 
 	public abstract double evaluateDefaultPolicy(int player);
