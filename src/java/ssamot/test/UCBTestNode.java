@@ -1,7 +1,5 @@
 package ssamot.test;
 
-import java.util.ArrayList;
-
 import ssamot.mcts.MCTSNode;
 import ssamot.mcts.StatisticsNode;
 

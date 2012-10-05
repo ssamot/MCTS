@@ -3,11 +3,8 @@ package ssamot.mcts.ucb.optimisation.nodes;
 import java.util.ArrayList;
 import java.util.List;
 
-import ssamot.mcts.StatisticsNode;
 import ssamot.mcts.MCTSContinuousNode;
-import ssamot.utilities.SerialClone;
-
-import com.rits.cloning.Cloner;
+import ssamot.mcts.StatisticsNode;
 
 public class UCBContinousNodeOptimisation extends MCTSContinuousNode {
 

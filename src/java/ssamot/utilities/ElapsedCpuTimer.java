@@ -25,7 +25,8 @@ package ssamot.utilities;
  *
  */
 
-import java.lang.management.*;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
 
 public class ElapsedCpuTimer {
 

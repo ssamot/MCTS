@@ -3,7 +3,6 @@ package ssamot.mcts.backpropagators;
 import java.util.List;
 
 import ssamot.mcts.StatisticsNode;
-import ssamot.mcts.MCTSContinuousNode;
 
 public class UCBBackpropagator<T extends StatisticsNode>implements Backpropagator<T> {
 

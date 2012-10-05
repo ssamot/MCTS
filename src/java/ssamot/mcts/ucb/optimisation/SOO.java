@@ -1,7 +1,7 @@
 package ssamot.mcts.ucb.optimisation;
 
-import ssamot.mcts.StatisticsNode;
 import ssamot.mcts.MCTSContinuousNode;
+import ssamot.mcts.StatisticsNode;
 import ssamot.mcts.selectors.ucb.UCB;
 
 public class SOO extends UCB {

@@ -2,8 +2,8 @@ package ssamot.mcts.ucb.optimisation;
 
 import java.util.List;
 
-import ssamot.mcts.StatisticsNode;
 import ssamot.mcts.MCTSContinuousNode;
+import ssamot.mcts.StatisticsNode;
 
 public class UCBNodeExplorer {
 

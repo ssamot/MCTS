@@ -1,6 +1,5 @@
 package ssamot.mcts.selectors.ucb;
 
-import ssamot.mcts.MCTSNode;
 import ssamot.mcts.StatisticsNode;
 
 public class UCBTUNED extends UCB {

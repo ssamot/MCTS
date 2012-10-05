@@ -1,6 +1,5 @@
 package ssamot.mcts.selectors.exp3;
 
-import ssamot.mcts.MCTSNode;
 import ssamot.mcts.selectors.Selector;
 import ssamot.utilities.MersenneTwister;
 
