@@ -1,14 +1,16 @@
 package ssamot.mcts;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import ssamot.utilities.ArraysCopy;
 import ssamot.utilities.MersenneTwister;
 import ssamot.utilities.SummaryStatistics;
 
-public abstract class MCTSContinuousNode extends StatisticsNode {
+public class MCTSContinuousNode extends StatisticsNode {
 
-	public MersenneTwister twister = new MersenneTwister();
+	public static MersenneTwister twister = new MersenneTwister();
 
 	protected double action = -1;
 
@@ -21,9 +23,9 @@ public abstract class MCTSContinuousNode extends StatisticsNode {
 	public String contId = "default";
 
 	// includes min
-	protected double min = 0;
+	protected double min[];
 	// does not include max
-	protected double max = 1;
+	protected double max[];
 	protected int splitPoints = 2;
 
 	private int point = -1;
@@ -33,27 +35,31 @@ public abstract class MCTSContinuousNode extends StatisticsNode {
 	private double sigma = 1.5;
 
 	double oldValue = Double.NEGATIVE_INFINITY;
-	
+
 	int timeshit = 0;
-	
-	int depth = 0;
 
+	private int depth = 0;
 
-	public void setup(double min, double max, int splitPoints, int point) {
+	private int maxDepth;
+
+	public MCTSContinuousNode(double[] min, double max[], int splitPoints,
+			int point, int depth, int maxDepth) {
 		this.min = min;
 		this.max = max;
 		this.splitPoints = splitPoints;
 		this.point = point;
-
-		assignAction();
+		this.actionStatistics = new SummaryStatistics();
+		this.depth = depth;
+		this.maxDepth = maxDepth;
+		this.autoGenerateChildren = false;
 
 	}
 
-	public double getMin() {
+	public double[] getMin() {
 		return min;
 	}
 
-	public double getMax() {
+	public double[] getMax() {
 		return max;
 	}
 
@@ -61,92 +67,129 @@ public abstract class MCTSContinuousNode extends StatisticsNode {
 		return splitPoints;
 	}
 
-	public double getContinousAction() {
+	public double getContinuousAction() {
 		return action;
 	}
 
+	
+	
 	@Override
 	public int getAction() {
 		// TODO Auto-generated method stub
 		return point;
 	}
 
-	public void assignAction() {
-		 action = min + Math.abs(max - min) * twister.nextDouble();
-		//action = min + Math.abs(max - min) / 2.0;
+	public double[] sampleAction() {
+		double[] sample = new double[min.length];
+		for (int i = 0; i < min.length; i++) {
+			sample[i] = min[i] + Math.abs(max[i] - min[i])
+					* twister.nextDouble();
+		}
+
+		return sample;
+		// action = min + Math.abs(max - min) / 2.0;
 	}
 
 	public void split() {
-		
-		//timeshit++;
-		
-		//if(timeshit < 6) {
-			
-		//	return;
-		//}
-			
-		if(depth > 8) {
-			//System.out.println(min + ", " + max);
-			assignAction();
-			return ;
-			
+
+		if (depth > maxDepth) {
+
+			return;
+
 		}
 
 		if (!hasBeenSplit) {
 
-			List<StatisticsNode> oldChildren = children;
 			children = new ArrayList<StatisticsNode>();
-			double interval = Math.abs(max - min) / (double) splitPoints;
+
+			// choose a dimension at random
+
+			int splitDim = twister.nextInt(min.length);
+			//System.out.println(splitDim);
+			double interval = Math.abs(max[splitDim] - min[splitDim])
+					/ (double) splitPoints;
 			for (int i = 0; i < splitPoints; i++) {
 
-				double nMin = min + i * interval;
-				double nMax = min + (i + 1) * interval;
-
-				// System.out.println(nMin + " " + nMax);
-				MCTSContinuousNode node = getNewInstance(oldChildren);
-				node.setup(nMin, nMax, splitPoints, i);
+				double nMinD = min[splitDim] + i * interval;
+				double nMaxD = min[splitDim] + (i + 1) * interval;
+				
+				double[] nMin = ArraysCopy.fastShallowArrayCopy(min);
+				double[] nMax = ArraysCopy.fastShallowArrayCopy(max);
+				nMin[splitDim] = nMinD;
+				nMax[splitDim] = nMaxD;
+				
+				//System.out.println(Arrays.toString(nMin) + Arrays.toString(nMax));
+				
+				
+				MCTSContinuousNode node = new MCTSContinuousNode(nMin, nMax,
+						splitPoints, i, depth + 1, maxDepth);
 				node.actionStatistics = new SummaryStatistics();
 				// node.actionStatistics.addValue(actionStatistics.getMean());
 				node.contId = contId;
-				// node.actionStatistics.setN(1);
-				node.assignAction();
-				node.depth = depth +1;
-				//System.out.println(node.depth);
 				children.add(node);
 			}
+			//System.out.println("");
 			hasBeenSplit = true;
 		}
 
 	}
 
-	public void mutate() {
-		oldAction = action;
-		action = action + sigma * twister.nextGaussian();
-		if (action > max) {
-			action = max;
-		}
-		if (action < min) {
-			action = min;
-		}
-		// System.out.println(action + " " + sigma);
+	public int getDepth() {
+		return depth;
 	}
+
 
 	
 
-	public void response(double value) {
-		// throw away mutation
+	@Override
+	public int getRewardId() {
+		// TODO Auto-generated method stub
+		return 1;
+	}
 
-		if (value >= oldValue) {
-			oldValue = value;
-			sigma = 1.5 * sigma;
+	@Override
+	public boolean isLeaf() {
+		if (isHasBeenSplit()) {
+			return false;
 		} else {
-
-			action = oldAction;
-			sigma = sigma * 0.9036020036098448;
+			return true;
 		}
+	}
+
+	@Override
+	public void generateChildren() {
+		// TODO Auto-generated method stub
 
 	}
 
-	public abstract MCTSContinuousNode getNewInstance(List<StatisticsNode> oldChildren);
+	@Override
+	public boolean canBeEvaluated() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public double evaluate(int player) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double evaluateDefaultPolicy(int player) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getGameTotalGamePlayers() {
+		// TODO Auto-generated method stub
+		return 2;
+	}
+
+	@Override
+	public String toString() {
+		return "Av [ac=" + String.format("%1.5f", actionStatistics.getMean())
+				+ "," + contId + "]";
+	}
 
 }

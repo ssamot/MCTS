@@ -36,6 +36,8 @@ public abstract class MCTSNode<T> {
 
 	private double probability = 0;
 
+	protected boolean autoGenerateChildren;
+
 	public double getProbability() {
 		return probability;
 	}
@@ -45,7 +47,7 @@ public abstract class MCTSNode<T> {
 	}
 
 	public List<T> getChildren() {
-		if (children == null && !isLeaf()) {
+		if (children == null && !isLeaf() && autoGenerateChildren) {
 			children = new ArrayList<T>();
 			generateChildren();
 		}

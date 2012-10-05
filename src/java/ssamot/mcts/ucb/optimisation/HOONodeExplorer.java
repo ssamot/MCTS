@@ -5,11 +5,11 @@ import java.util.List;
 import ssamot.mcts.MCTSContinuousNode;
 import ssamot.mcts.StatisticsNode;
 
-public class UCBNodeExplorer {
+public class HOONodeExplorer {
 
 	StatisticsNode node;
 
-	public UCBNodeExplorer(StatisticsNode node) {
+	public HOONodeExplorer(StatisticsNode node) {
 		super();
 		this.node = node;
 	}
@@ -67,7 +67,7 @@ public class UCBNodeExplorer {
 				// ccNode.getMin() + " " + ccNode.getMax() + " test");
 
 				// }
-				result[position] = ccNode.getContinousAction();
+				result[position] = ccNode.getContinuousAction();
 				position++;
 				// System.out.println( ccNode.contId);
 			}
