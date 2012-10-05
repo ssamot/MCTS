@@ -42,6 +42,8 @@ public class MCTSContinuousNode extends StatisticsNode {
 
 	private int maxDepth;
 
+	private double B;
+
 	public MCTSContinuousNode(double[] min, double max[], int splitPoints,
 			int point, int depth, int maxDepth) {
 		this.min = min;
@@ -52,6 +54,7 @@ public class MCTSContinuousNode extends StatisticsNode {
 		this.depth = depth;
 		this.maxDepth = maxDepth;
 		this.autoGenerateChildren = false;
+		this.B = (double) Integer.MAX_VALUE - twister.nextDouble();
 
 	}
 
@@ -190,6 +193,15 @@ public class MCTSContinuousNode extends StatisticsNode {
 	public String toString() {
 		return "Av [ac=" + String.format("%1.5f", actionStatistics.getMean())
 				+ "," + contId + "]";
+	}
+
+	public void setB(double b) {
+		this.B = b;
+		
+	}
+
+	public double getB() {
+		return this.B;
 	}
 
 }

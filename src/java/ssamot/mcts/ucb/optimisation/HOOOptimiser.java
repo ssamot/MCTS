@@ -12,11 +12,12 @@ public class HOOOptimiser extends MCTS<MCTSContinuousNode> {
 	public HOOOptimiser(ContinuousProblem func, int dimension, int iterations,
 			double min, double max, int splitPoints) {
 		super();
+		HOOB hoob = new HOOB(dimension, iterations);
+
 		setActionSelector(new UCBActionSelector());
-		bp = new HOOTruncatedBackpropagator(func, dimension);
+		bp = new HOOTruncatedBackpropagator(func, dimension,hoob);
 		setBackpropagator(bp);
 		setChanceNodeSelector(new ChanceProportional());
-		HOOB hoob = new HOOB(dimension, iterations);
 		setDeterministicNodeSelector(hoob);
 
 		double[] minA = new double[dimension];

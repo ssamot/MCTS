@@ -16,12 +16,15 @@ public class HOOTruncatedBackpropagator implements
 	
 	double bestValue = Double.NEGATIVE_INFINITY;
 	double[] bestSample = null;
+	HOOB hoob = null;
+	
 	// boolean once = true;
 
-	public HOOTruncatedBackpropagator(ContinuousProblem function, int length) {
+	public HOOTruncatedBackpropagator(ContinuousProblem function, int length, HOOB hoob) {
 		super();
 		this.function = function;
 		this.length = length;
+		this.hoob = hoob;
 	}
 
 	@Override
@@ -50,12 +53,33 @@ public class HOOTruncatedBackpropagator implements
 
 			MCTSContinuousNode node = nodes.get(i);
 			int id = node.getRewardId();
-
+			//System.out.println(i + " " + (nodeSize -2));
 			if (id > 0) {
 				node.getStatistics().addValue(value);		
 			} else {
 				// root or random nodes
 				node.getStatistics().addValue(1.0);
+			}
+			
+			// if we are at the father of the last Node;
+			if(i == nodeSize -2) {
+				//System.out.println(i);
+				//System.out.println(node.getChildren().get(0));
+				double B1 = hoob.getU((MCTSContinuousNode) node.getChildren().get(0));
+				double B2 = hoob.getU((MCTSContinuousNode) node.getChildren().get(1));
+				double U = hoob.getU(node);
+				double maxB = Math.max(B1, B2);
+				double B = Math.min(U, maxB);
+				node.setB(B);
+			}
+			
+			if(i < nodeSize -2) {
+				double B1 = ((MCTSContinuousNode) node.getChildren().get(0)).getB();
+				double B2 = ((MCTSContinuousNode) node.getChildren().get(1)).getB();
+				double U = hoob.getU(node);
+				double maxB = Math.max(B1, B2);
+				double B = Math.min(U, maxB);
+				node.setB(B);
 			}
 
 		}
