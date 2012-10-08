@@ -1,0 +1,133 @@
+/*
+ *
+ * E-EPNAC Poker A.I.
+ * Spyridon Samothrakis ssamot@essex.com
+ * All code (c) 2011 Spyridon Samothrakis All Rights Reserved
+ *
+ */
+
+package ssamot.utilities;
+/*
+ *   Copyright (C) 2010  Spyridon Samothrakis
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+import java.lang.management.*;
+
+public class ElapsedCpuTimer {
+
+	// allows for easy reporting of elapsed time
+	ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+	long oldTime;
+	long maxTime;
+
+	public enum TimerType {
+		WALL_TIME, CPU_TIME, USER_TIME
+	};
+
+	public TimerType type = TimerType.WALL_TIME;
+
+	public ElapsedCpuTimer(TimerType type) {
+		this.type = type;
+		oldTime = getTime();
+	}
+
+	public ElapsedCpuTimer() {
+		oldTime = getTime();
+	}
+
+	public long elapsed() {
+		return getTime() - oldTime;
+	}
+
+	public long elapsedMillis() {
+		return (long) (elapsed() / 1000000.0);
+	}
+
+	
+	public double elapsedMinutes() {
+		return elapsedMillis()/1000.0/60.0;
+	}
+	
+	
+	public double elapsedHours() {
+		return elapsedMinutes()/60.0;
+	}
+	
+	public void reset() {
+		oldTime = getTime();
+	}
+
+	public String toString() {
+		// now resets the timer...
+		String ret = elapsed() / 1000000.0 + " ms elapsed";
+		reset();
+		return ret;
+	}
+
+	private long getTime() {
+		switch (type) {
+		case WALL_TIME:
+			return getWallTime();
+
+		case CPU_TIME:
+			return getCpuTime();
+
+		case USER_TIME:
+			return getUserTime();
+
+		default:
+			break;
+		}
+		return getCpuTime();
+	}
+
+	private long getWallTime() {
+		return System.nanoTime();
+	}
+
+	private long getCpuTime() {
+
+		//if (bean.isCurrentThreadCpuTimeSupported()) {
+			return bean.getCurrentThreadCpuTime();
+		//} else {
+		//	throw new RuntimeException("CpuTime NOT Supported");
+		//}
+
+	}
+
+	private long getUserTime() {
+		//if (bean.isCurrentThreadCpuTimeSupported()) {
+			return bean.getCurrentThreadUserTime();
+		//} else {
+		//	throw new RuntimeException("UserTime NOT Supported");
+		//}
+
+	}
+
+	public void setMaxTimeMillis(long time) {
+		maxTime = time * 1000000;
+
+	}
+
+	public boolean exceededMaxTime() {
+		if (elapsed() >= maxTime) {
+			return true;
+		}
+		return false;
+	}
+
+}
