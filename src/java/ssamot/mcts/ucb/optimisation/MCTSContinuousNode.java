@@ -46,9 +46,9 @@ public class MCTSContinuousNode extends StatisticsNode {
 
 	private double B;
 
-	private boolean propagateSamples = true;
+	private boolean propagateSamples = false;
 
-	private static HashMap<double[], Double> samples;
+	private HashMap<double[], Double> samples;
 
 	public MCTSContinuousNode(double[] min, double max[], int splitPoints,
 			int point, int depth, int maxDepth) {
@@ -130,7 +130,7 @@ public class MCTSContinuousNode extends StatisticsNode {
 			childrenSamples[0] = new HashMap<double[], Double>();
 			childrenSamples[1] = new HashMap<double[], Double>();
 
-			if (samples != null && samples.size() > 1) {
+			if (samples != null && samples.size() >= 1) {
 
 				for (double[] sample : samples.keySet()) {
 					if (sample[splitDim] <= min[splitDim] + interval) {
@@ -139,9 +139,12 @@ public class MCTSContinuousNode extends StatisticsNode {
 						childrenSamples[1].put(sample, samples.get(sample));
 					}
 				}
-
+				//System.err.println(samples.keySet().size());
 			}
 
+		
+			//System.err.println(childrenSamples[0].keySet().size());
+			//System.err.println(childrenSamples[1].keySet().size());
 			for (int i = 0; i < splitPoints; i++) {
 
 				double nMinD = min[splitDim] + i * interval;
