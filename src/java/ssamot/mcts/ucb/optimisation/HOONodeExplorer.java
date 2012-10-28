@@ -2,7 +2,6 @@ package ssamot.mcts.ucb.optimisation;
 
 import java.util.List;
 
-import ssamot.mcts.MCTSContinuousNode;
 import ssamot.mcts.StatisticsNode;
 
 public class HOONodeExplorer {

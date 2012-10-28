@@ -2,7 +2,6 @@ package ssamot.mcts.ucb.optimisation;
 
 import java.util.List;
 
-import ssamot.mcts.MCTSContinuousNode;
 import ssamot.mcts.MCTSNode;
 import ssamot.mcts.StatisticsNode;
 import ssamot.mcts.backpropagators.Backpropagator;
@@ -42,6 +41,8 @@ public class HOOTruncatedBackpropagator implements
 
 		double value = function.evaluate(funcVal);
 		
+		nodes.get(nodes.size()-1).addSample(funcVal, value);
+		
 		if(value > bestValue) {
 			bestValue = value;
 			bestSample = funcVal;
@@ -78,7 +79,9 @@ public class HOOTruncatedBackpropagator implements
 				double B2 = ((MCTSContinuousNode) node.getChildren().get(1)).getB();
 				double U = hoob.getU(node);
 				double maxB = Math.max(B1, B2);
+				
 				double B = Math.min(U, maxB);
+				//System.out.println(B);
 				node.setB(B);
 			}
 

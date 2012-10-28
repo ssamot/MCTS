@@ -11,6 +11,8 @@ package ssamot.mcts;
 import java.util.List;
 import java.util.Random;
 
+import ssamot.mcts.ucb.optimisation.MCTSContinuousNode;
+
 
 public class TreeExplorer {
 	private Random generator = new Random();

@@ -1,7 +1,6 @@
 package ssamot.mcts.ucb.optimisation;
 
 import ssamot.mcts.MCTS;
-import ssamot.mcts.MCTSContinuousNode;
 import ssamot.mcts.selectors.ChanceProportional;
 import ssamot.mcts.selectors.ucb.UCBActionSelector;
 

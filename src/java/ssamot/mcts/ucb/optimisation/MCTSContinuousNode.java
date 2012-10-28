@@ -1,9 +1,11 @@
-package ssamot.mcts;
+package ssamot.mcts.ucb.optimisation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
+import ssamot.mcts.StatisticsNode;
 import ssamot.utilities.ArraysCopy;
 import ssamot.utilities.MersenneTwister;
 import ssamot.utilities.SummaryStatistics;
@@ -44,6 +46,10 @@ public class MCTSContinuousNode extends StatisticsNode {
 
 	private double B;
 
+	private boolean propagateSamples = true;
+
+	private static HashMap<double[], Double> samples;
+
 	public MCTSContinuousNode(double[] min, double max[], int splitPoints,
 			int point, int depth, int maxDepth) {
 		this.min = min;
@@ -55,8 +61,21 @@ public class MCTSContinuousNode extends StatisticsNode {
 		this.maxDepth = maxDepth;
 		this.autoGenerateChildren = false;
 		this.B = (double) Integer.MAX_VALUE - twister.nextDouble();
+		
 
 	}
+	
+	public void addSample(double[] sample, double reward) {
+		if(propagateSamples) {
+			if(samples == null ) {
+			samples = new HashMap<double[], Double>();
+			}
+			samples.put(sample, reward);
+		}
+		
+		
+	}
+	
 
 	public double[] getMin() {
 		return min;
@@ -111,6 +130,24 @@ public class MCTSContinuousNode extends StatisticsNode {
 			//System.out.println(splitDim);
 			double interval = Math.abs(max[splitDim] - min[splitDim])
 					/ (double) splitPoints;
+			
+			HashMap<double[], Double>[] childrenSamples = new HashMap[2];
+			childrenSamples[0] = new HashMap<double[], Double>();
+			childrenSamples[1] = new HashMap<double[], Double>();
+			
+			if(samples!=null) {
+			
+			for (double[] sample : samples.keySet()) {
+				if(sample[splitDim] <= min[splitDim] +  interval ) {
+					childrenSamples[0].put(sample, samples.get(sample));
+				}
+				else {
+					childrenSamples[1].put(sample, samples.get(sample));
+				}
+			}
+			
+			}
+			
 			for (int i = 0; i < splitPoints; i++) {
 
 				double nMinD = min[splitDim] + i * interval;
@@ -127,6 +164,12 @@ public class MCTSContinuousNode extends StatisticsNode {
 				MCTSContinuousNode node = new MCTSContinuousNode(nMin, nMax,
 						splitPoints, i, depth + 1, maxDepth);
 				node.actionStatistics = new SummaryStatistics();
+				
+				if(propagateSamples) {
+				
+					node.samples = childrenSamples[i];
+					node.recalculateStatistics();
+				}
 				// node.actionStatistics.addValue(actionStatistics.getMean());
 				node.contId = contId;
 				children.add(node);
@@ -135,6 +178,14 @@ public class MCTSContinuousNode extends StatisticsNode {
 			hasBeenSplit = true;
 		}
 
+	}
+
+	private void recalculateStatistics() {
+		for (double value : samples.values()) {
+			actionStatistics.addValue(value);
+		}
+		
+		System.out.println(actionStatistics.getN());
 	}
 
 	public int getDepth() {

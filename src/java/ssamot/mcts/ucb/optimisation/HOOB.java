@@ -1,6 +1,5 @@
 package ssamot.mcts.ucb.optimisation;
 
-import ssamot.mcts.MCTSContinuousNode;
 import ssamot.mcts.MCTSNode;
 import ssamot.mcts.StatisticsNode;
 import ssamot.mcts.selectors.ucb.UCB;
@@ -63,10 +62,11 @@ public class HOOB extends UCB<MCTSContinuousNode> {
 	public double getNodeScore(MCTSContinuousNode fatherNode,
 			MCTSContinuousNode childNode) {
 
-		return childNode.getB();
 		
-//		double score = 0;
-//
+		
+		double score = 0;
+		score =  childNode.getB();
+
 //		if (fatherNode.getStatistics().getN() < UCB_MINIMUM_ITERATIONS) {
 //			score = (double) Integer.MAX_VALUE - twister.nextDouble();
 //		}
@@ -112,25 +112,10 @@ public class HOOB extends UCB<MCTSContinuousNode> {
 //			// System.err.println("random");
 //		}
 
-		// SOO STUFF
-		// if (childNode instanceof MCTSContinuousNode) {
-		// MCTSContinuousNode castedNode = (MCTSContinuousNode) childNode;
-		// if (!castedNode.isHasBeenSplit()) {
-		// double n = fatherNode.getStatistics().getN();
-		// double leaf_k = childNode.getStatistics().getN();
-		// double log_n = Math.log(n);
-		// n = n / (log_n * log_n * log_n);
-		//
-		// if (leaf_k > n) {
-		// //System.out.println("spliting");
-		// castedNode.split();
-		// }
-		//
-		// }
-		// }
+		
 
-		//assert (score != Double.NaN);
-		//return score;
+		assert (score != Double.NaN);
+		return score;
 	}
 
 	public int getMaxDepth() {
