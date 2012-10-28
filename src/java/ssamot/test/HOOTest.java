@@ -3,9 +3,11 @@ package ssamot.test;
 import java.util.Arrays;
 
 import junit.framework.TestCase;
+import ssamot.mcts.MCTS;
 import ssamot.mcts.StatisticsNode;
 import ssamot.mcts.UCT;
 import ssamot.mcts.ucb.optimisation.HOOOptimiser;
+import ssamot.utilities.SummaryStatistics;
 
 public class HOOTest extends TestCase {
 	
@@ -46,19 +48,28 @@ public class HOOTest extends TestCase {
 
 		XSquaredCoco func = new XSquaredCoco();
 
-		int iterations = 100000;
+		int iterations = 10000;
 
 		int dimension = 2;
 
 		int min = -1;
 		int max = 1;
 		int splitPoints = 2;
-
-		HOOOptimiser hoo = new HOOOptimiser(func, dimension, iterations, min,
-				max, splitPoints);
-		hoo.runForSim(iterations);
-		System.out.println(Arrays.toString(hoo.getBestSample()) + ","
-				+ hoo.getBestValue());
+		MCTS.DEBUG = false;
+		SummaryStatistics stats = new SummaryStatistics();
+		for (int i = 0; i < 2000; i++) {
+			HOOOptimiser hoo = new HOOOptimiser(func, dimension, iterations, min,
+					max, splitPoints);
+			hoo.runForSim(iterations);
+//			System.out.println(Arrays.toString(hoo.getBestSample()) + ","
+//					+ hoo.getBestValue());
+			
+			stats.addValue(hoo.getBestValue());
+			//System.out.println(i);
+		}
+		
+		System.out.println(stats);
+	
 	}
 
 }

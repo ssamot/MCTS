@@ -19,7 +19,7 @@ public class XSquaredCoco extends ContinuousProblem {
 			res += ((x[i]-0.6)*(x[i]-0.6));
 		}
 		
-		return -res;
+		return -res/2.0;
 	}
 
 }

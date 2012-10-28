@@ -40,7 +40,7 @@ public class HOOB extends UCB<MCTSContinuousNode> {
 		}
 
 		double denom = Math.log(1 / rho);
-		System.err.println(this.vOne + ", " + denom);
+		//System.err.println(this.vOne + ", " + denom);
 		return (int) Math.ceil(num / denom);
 	}
 
