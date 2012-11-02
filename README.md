@@ -1,0 +1,1 @@
+This is an implementation of Monte Carlo Tree Search in Java, plus a Truncated Version of HOO from the [X-Armed Bandits](jmlr.csail.mit.edu/papers/volume12/bubeck11a/bubeck11a.pdf) paper. See ssamot.test package for example usage. 
