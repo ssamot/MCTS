@@ -1,32 +1,24 @@
-package ssamot.mcts;
-
 /*
- * Spyridon Samothrakis, 07-Feb-2010
- * An implementation of UCT+
- * Algorithm as presented in  
- * http://hal.inria.fr/docs/00/12/15/16/PDF/RR-6062.pdf
- * and 
- * http://www.springerlink.com/content/l7v1647363415h1t/
- * 
- * Supports expectimax-n trees ( expectimax, minimax, planning, max-n, probmax-n)
- * 
- *   Copyright (C) 2010  Spyridon Samothrakis
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
+ * *** BEGIN LICENSE
+ *  Copyright (C) 2012 Spyridon Samothrakis spyridon.samothrakis@gmail.com
+ *  This program is free software: you can redistribute it and/or modify it
+ *  under the terms of the GNU General Public License version 3, as published
+ *  by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful, but
+ *  WITHOUT ANY WARRANTY; without even the implied warranties of
+ *  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
+ *  PURPOSE.  See the GNU General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * *** END LICENSE
  *
  */
-//import java.text.NumberFormat;
+
+package ssamot.mcts;
+
 
 import java.util.ArrayList;
 import java.util.List;
