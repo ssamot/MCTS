@@ -23,7 +23,10 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
+import ec.util.MersenneTwister;
+
 public class Common {
+	public static MersenneTwister twister = new MersenneTwister();
 
 	public static boolean arrayRepresentsProbability(double[] probs) {
 		double sum = 0;
@@ -43,19 +46,18 @@ public class Common {
 			return false;
 		}
 	}
-	
+
 	public static boolean testIfpotIsEqual(short[] pot, boolean[] folded) {
 		boolean flag = true;
-	
+
 		int first = -1;
-		
-		for(int i = 1; i < pot.length && flag; i++)
-		{
-			if(!folded[i]) {
-				if(first == -1) {
+
+		for (int i = 1; i < pot.length && flag; i++) {
+			if (!folded[i]) {
+				if (first == -1) {
 					first = pot[i];
 				}
-				if (pot[i] != first ) {
+				if (pot[i] != first) {
 					System.err.println(Arrays.toString(pot));
 					System.err.println(Arrays.toString(folded));
 					System.err.println(i + " " + pot[i]);
@@ -66,11 +68,12 @@ public class Common {
 		}
 		return flag;
 	}
+
 	public static boolean rewardsAreZeroSum(List<Double> rewards, Object game) {
 		double sum = 0;
-		
+
 		for (Double reward : rewards) {
-			sum+=reward;
+			sum += reward;
 		}
 
 		if (!(Math.abs(sum) < 0.00001)) {
@@ -80,7 +83,7 @@ public class Common {
 			return false;
 		}
 		return true;
-	//	LimitHoldemMCTSNode g = (LimitHoldemMCTSNode)game;
+		// LimitHoldemMCTSNode g = (LimitHoldemMCTSNode)game;
 	}
 
 	public static boolean arrayRepresentsProbability(float[] probs) {
@@ -97,6 +100,22 @@ public class Common {
 
 			return false;
 		}
+	}
+
+	public static int pickRandomProportionally(double[] probs) {
+		double rand = twister.nextDouble();
+		//System.out.println(rand);
+		double probSum = 0;
+		for (int i = 0; i < probs.length; i++) {
+			probSum += probs[i];
+			if (probSum >= rand) {
+				return i;
+			}
+
+		}
+
+		return probs.length-1;
+
 	}
 
 	private static double SIGMOID[];
@@ -154,7 +173,6 @@ public class Common {
 		return tbr;
 	}
 
-	
 	public static void shuffle(int[] targetArray) {
 		int targetIndex;
 		int swapBuffer;

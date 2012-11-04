@@ -28,7 +28,7 @@ public class HOOOptimiser extends MCTS<MCTSContinuousNode> {
 	private HOOTruncatedBackpropagator bp;
 
 	public HOOOptimiser(ContinuousProblem func, int dimension, int iterations,
-			double min, double max, int splitPoints) {
+			double min, double max, double gamma) {
 		super();
 		HOOB hoob = new HOOB(dimension, iterations);
 
@@ -48,7 +48,7 @@ public class HOOOptimiser extends MCTS<MCTSContinuousNode> {
 
 		//System.out.println("maxDepth = " + hoob.getMaxDepth());
 		MCTSContinuousNode rootNode = new MCTSContinuousNode(minA, maxA,
-				splitPoints, -1, 0, hoob.getMaxDepth());
+				2, -1, 0, hoob.getMaxDepth(), gamma);
 		rootNode.split();
 		rootNode.contId = "root";
 		setRootNode(rootNode);

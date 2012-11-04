@@ -20,10 +20,12 @@
 package ssamot.mcts.ucb.optimisation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import ssamot.mcts.StatisticsNode;
 import ssamot.utilities.ArraysCopy;
+import ssamot.utilities.Common;
 import ssamot.utilities.SummaryStatistics;
 import ec.util.MersenneTwister;
 
@@ -67,8 +69,10 @@ public class MCTSContinuousNode extends StatisticsNode {
 
 	private HashMap<double[], Double> samples;
 
+	private double gamma;
+
 	public MCTSContinuousNode(double[] min, double max[], int splitPoints,
-			int point, int depth, int maxDepth) {
+			int point, int depth, int maxDepth, double gamma) {
 		this.min = min;
 		this.max = max;
 		this.splitPoints = splitPoints;
@@ -78,6 +82,7 @@ public class MCTSContinuousNode extends StatisticsNode {
 		this.maxDepth = maxDepth;
 		this.autoGenerateChildren = false;
 		this.B = (double) Integer.MAX_VALUE - twister.nextDouble();
+		this.gamma = gamma;
 
 	}
 
@@ -138,8 +143,28 @@ public class MCTSContinuousNode extends StatisticsNode {
 
 			// choose a dimension at random
 
-			int splitDim = twister.nextInt(min.length);
-			// System.out.println(splitDim);
+			int splitDim = 0;
+
+			if (gamma < 1.0) {
+				double[] splitProbs = new double[min.length];
+				double sum=0;
+				for (int i = 0; i < min.length; i++) {
+					splitProbs[i] = Math.pow(gamma, i);
+					sum+=splitProbs[i];
+				}
+				
+				for (int i = 0; i < min.length; i++) {
+					splitProbs[i] = splitProbs[i]/sum;
+					
+				}
+				splitDim = Common.pickRandomProportionally(splitProbs);
+				//System.out.println(Arrays.toString(splitProbs));
+				//System.out.println(splitDim);
+			} else {
+				splitDim = twister.nextInt(min.length);
+			}
+			//splitDim = twister.nextInt(min.length);
+			//System.out.println(splitDim);
 			double interval = Math.abs(max[splitDim] - min[splitDim])
 					/ (double) splitPoints;
 
@@ -147,21 +172,20 @@ public class MCTSContinuousNode extends StatisticsNode {
 			childrenSamples[0] = new HashMap<double[], Double>();
 			childrenSamples[1] = new HashMap<double[], Double>();
 
-			if (samples != null && samples.size() >= 1) {
+			// if (samples != null && samples.size() >= 1) {
+			//
+			// for (double[] sample : samples.keySet()) {
+			// if (sample[splitDim] <= min[splitDim] + interval) {
+			// childrenSamples[0].put(sample, samples.get(sample));
+			// } else {
+			// childrenSamples[1].put(sample, samples.get(sample));
+			// }
+			// }
+			// //System.err.println(samples.keySet().size());
+			// }
 
-				for (double[] sample : samples.keySet()) {
-					if (sample[splitDim] <= min[splitDim] + interval) {
-						childrenSamples[0].put(sample, samples.get(sample));
-					} else {
-						childrenSamples[1].put(sample, samples.get(sample));
-					}
-				}
-				//System.err.println(samples.keySet().size());
-			}
-
-		
-			//System.err.println(childrenSamples[0].keySet().size());
-			//System.err.println(childrenSamples[1].keySet().size());
+			// System.err.println(childrenSamples[0].keySet().size());
+			// System.err.println(childrenSamples[1].keySet().size());
 			for (int i = 0; i < splitPoints; i++) {
 
 				double nMinD = min[splitDim] + i * interval;
@@ -176,7 +200,7 @@ public class MCTSContinuousNode extends StatisticsNode {
 				// Arrays.toString(nMax));
 
 				MCTSContinuousNode node = new MCTSContinuousNode(nMin, nMax,
-						splitPoints, i, depth + 1, maxDepth);
+						splitPoints, i, depth + 1, maxDepth, gamma);
 				node.actionStatistics = new SummaryStatistics();
 
 				if (propagateSamples) {
@@ -199,7 +223,7 @@ public class MCTSContinuousNode extends StatisticsNode {
 			actionStatistics.addValue(value);
 		}
 
-		//System.out.println(actionStatistics.getN());
+		// System.out.println(actionStatistics.getN());
 	}
 
 	public int getDepth() {
