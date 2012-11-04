@@ -65,7 +65,7 @@ public class MCTSContinuousNode extends StatisticsNode {
 
 	private double B;
 
-	private boolean propagateSamples = false;
+	private boolean propagateSamples = true;
 
 	private HashMap<double[], Double> samples;
 
@@ -130,9 +130,9 @@ public class MCTSContinuousNode extends StatisticsNode {
 	}
 
 	public void split() {
-
+		//System.out.println(depth);
 		if (depth > maxDepth) {
-
+			
 			return;
 
 		}

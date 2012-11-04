@@ -65,6 +65,8 @@ public class HOOTruncatedBackpropagator implements
 		if(value > bestValue) {
 			bestValue = value;
 			bestSample = funcVal;
+			//System.out.println(bestValue);
+			
 		}
 		
 		// System.out.println(Arrays.toString(funcVal) + length + " " + value);

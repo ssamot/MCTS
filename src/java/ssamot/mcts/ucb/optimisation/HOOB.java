@@ -23,7 +23,7 @@ import ssamot.mcts.selectors.ucb.UCB;
 
 public class HOOB extends UCB<MCTSContinuousNode> {
 
-	private double UCB1_C = 1;
+	private double UCB1_C = 1.0;
 	private double UCB_MINIMUM_ITERATIONS = 1;
 	private double alpha = 2;
 	// private
@@ -56,19 +56,34 @@ public class HOOB extends UCB<MCTSContinuousNode> {
 		}
 
 		double denom = Math.log(1 / rho);
-		//System.err.println(this.vOne + ", " + denom);
+		// System.err.println(this.vOne + ", " + denom);
 		return (int) Math.ceil(num / denom);
 	}
 
 	public double getU(MCTSContinuousNode childNode) {
-		
-		if(childNode.getStatistics().getN() < UCB_MINIMUM_ITERATIONS) {
+
+		if (childNode.getStatistics().getN() < UCB_MINIMUM_ITERATIONS) {
 			return (double) Integer.MAX_VALUE - twister.nextDouble();
 		}
-		
+
 		double score = childNode.getStatistics().getMean()
 				+ UCB1_C
-				* (Math.sqrt((2.0 * Math.log(iterations))) / childNode
+				* Math.sqrt((2.0 * Math.log(iterations))
+						/ childNode.getStatistics().getN()) + vOne
+				* Math.pow(rho, childNode.getDepth());
+		return score;
+	}
+
+	public double getU(MCTSContinuousNode fatherNode,
+			MCTSContinuousNode childNode) {
+
+		if (childNode.getStatistics().getN() < UCB_MINIMUM_ITERATIONS) {
+			return (double) Integer.MAX_VALUE - twister.nextDouble();
+		}
+
+		double score = childNode.getStatistics().getMean()
+				+ UCB1_C
+				* (Math.sqrt((2.0 * Math.log(fatherNode.getStatistics().getN()))) / childNode
 						.getStatistics().getN()) + vOne
 				* Math.pow(rho, childNode.getDepth());
 		return score;
@@ -77,59 +92,55 @@ public class HOOB extends UCB<MCTSContinuousNode> {
 	@Override
 	public double getNodeScore(MCTSContinuousNode fatherNode,
 			MCTSContinuousNode childNode) {
-
-		
-		
+		// System.out.println("test");
 		double score = 0;
-		score =  childNode.getB();
+		score = childNode.getB();
+		//
+		// if (fatherNode.getStatistics().getN() < UCB_MINIMUM_ITERATIONS) {
+		// score = (double) Integer.MAX_VALUE - twister.nextDouble();
+		// }
+		//
+		// else if (childNode.getStatistics().getN() != 0) {
+		//
+		// double U = getU(fatherNode, childNode);
+		// assert (fatherNode.getStatistics().getN() != 0);
+		//
+		// // System.out.println(fatherNode.getStatistics().getN() + "  " +
+		// childNode.getStatistics().getN() + score);
 
-//		if (fatherNode.getStatistics().getN() < UCB_MINIMUM_ITERATIONS) {
-//			score = (double) Integer.MAX_VALUE - twister.nextDouble();
-//		}
-//
-//		else if (childNode.getStatistics().getN() != 0) {
-//
-//			double U = getU(childNode);
-//			assert (fatherNode.getStatistics().getN() != 0);
-//
-//			// System.out.println(fatherNode.getStatistics().getN() + "  " +
-//			// childNode.getStatistics().getN() + score);
-//
-//			if (childNode.getChildren() == null) {
-//				score = (double) Integer.MAX_VALUE - twister.nextDouble();
-//				return score;
-//			}
-//
-//			MCTSContinuousNode child1 = (MCTSContinuousNode) childNode
-//					.getChildren().get(0);
-//			MCTSContinuousNode child2 = (MCTSContinuousNode) childNode
-//					.getChildren().get(1);
-//
-//			if (child1.getStatistics().getN() < UCB_MINIMUM_ITERATIONS) {
-//				score = (double) Integer.MAX_VALUE - twister.nextDouble();
-//				return score;
-//			}
-//
-//			if (child2.getStatistics().getN() < UCB_MINIMUM_ITERATIONS) {
-//				score = (double) Integer.MAX_VALUE - twister.nextDouble();
-//				return score;
-//			}
-//
-//			double B1 = getU(child1);
-//			double B2 = getU(child2);
-//			// System.out.println(U + " " + B1 + "   " + B2);
-//			double maxB = Math.max(B1, B2);
-//			score = Math.min(U, maxB);
-//
-//		}
-//
-//		else {
-//			score = (double) Integer.MAX_VALUE - twister.nextDouble();
-//			// System.err.println("random");
-//		}
-
-		
-
+		// if (childNode.getChildren() == null) {
+		// score = (double) Integer.MAX_VALUE - twister.nextDouble();
+		// return score;
+		// }
+		//
+		// MCTSContinuousNode child1 = (MCTSContinuousNode) childNode
+		// .getChildren().get(0);
+		// MCTSContinuousNode child2 = (MCTSContinuousNode) childNode
+		// .getChildren().get(1);
+		//
+		// if (child1.getStatistics().getN() < UCB_MINIMUM_ITERATIONS) {
+		// score = (double) Integer.MAX_VALUE - twister.nextDouble();
+		// return score;
+		// }
+		//
+		// if (child2.getStatistics().getN() < UCB_MINIMUM_ITERATIONS) {
+		// score = (double) Integer.MAX_VALUE - twister.nextDouble();
+		// return score;
+		// }
+		//
+		// double B1 = getU(childNode, child1);
+		// double B2 = getU(childNode,child2);
+		// // System.out.println(U + " " + B1 + "   " + B2);
+		// double maxB = Math.max(B1, B2);
+		// score = Math.min(U, maxB);
+		//
+		// }
+		//
+		// else {
+		// score = (double) Integer.MAX_VALUE - twister.nextDouble();
+		// // System.err.println("random");
+		// }
+		//
 		assert (score != Double.NaN);
 		return score;
 	}
