@@ -28,7 +28,7 @@ public class HOOB extends UCB<MCTSContinuousNode> {
 	private double alpha = 2;
 	// private
 
-	private int dimension;
+	private int dimensions;
 	private int iterations;
 	private double rho;
 	private double vOne;
@@ -36,7 +36,7 @@ public class HOOB extends UCB<MCTSContinuousNode> {
 
 	public HOOB(int dimension, int iterations) {
 		super();
-		this.dimension = dimension;
+		this.dimensions = dimension;
 		this.rho = Math.pow(2, (-alpha / dimension));
 		this.vOne = Math.pow(Math.sqrt(dimension / 2), alpha);
 		this.iterations = iterations;
@@ -147,6 +147,14 @@ public class HOOB extends UCB<MCTSContinuousNode> {
 
 	public int getMaxDepth() {
 		return maxDepth;
+	}
+
+	public int getDimensions() {
+		return dimensions;
+	}
+
+	public int getIterations() {
+		return iterations;
 	}
 
 }

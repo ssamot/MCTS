@@ -26,14 +26,24 @@ import ssamot.mcts.selectors.ucb.UCBActionSelector;
 public class HOOOptimiser extends MCTS<MCTSContinuousNode> {
 
 	private HOOTruncatedBackpropagator bp;
+	private HOOB hoob;
+	private double min;
+	private double max;
+	private double gamma;
 
 	public HOOOptimiser(ContinuousProblem func, int dimension, int iterations,
 			double min, double max, double gamma) {
 		super();
-		HOOB hoob = new HOOB(dimension, iterations);
+		
+		this.min = min;
+		this.max = max;
+		this.gamma = gamma;
+		
+		hoob = new HOOB(dimension, iterations);
 
+		
 		setActionSelector(new UCBActionSelector());
-		bp = new HOOTruncatedBackpropagator(func, dimension,hoob);
+		bp = new HOOTruncatedBackpropagator(iterations, func, dimension,hoob);
 		setBackpropagator(bp);
 		setChanceNodeSelector(new ChanceProportional());
 		setDeterministicNodeSelector(hoob);
@@ -59,6 +69,17 @@ public class HOOOptimiser extends MCTS<MCTSContinuousNode> {
 		return bp.getBestValue();
 	}
 
+	public double[] getBestRootSample() {
+		double[][] samples = bp.getSamples();
+		double[] rewards = bp.getRewards();
+		int dimensions = hoob.getDimensions();
+	    int iterations = hoob.getIterations();
+	    
+		MDPRootActionReplayer mr = new MDPRootActionReplayer();
+		double[] score = mr.replay(samples, rewards, dimensions, iterations, min, max, gamma);
+		return score;
+	}
+	
 	public double[] getBestSample() {
 		return bp.getBestSample();
 	}
