@@ -212,5 +212,23 @@ public class Common {
 
 		}
 	}
+	
+	public static short convertDoubleToShort(double value) {
+		double min = Short.MIN_VALUE; 
+		double max = Short.MAX_VALUE;
+		
+		short r =   (short) ((value * (max-min)) - min);
+		return r;
+		
+	}
+	
+	public static double convertShortToDouble(short value) {
+		double min = Short.MIN_VALUE; 
+		double max = Short.MAX_VALUE;
+		
+		double r = ((double)value -min)/ (max-min);
+		return r;
+		
+	}
 
 }

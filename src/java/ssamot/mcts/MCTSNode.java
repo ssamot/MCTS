@@ -26,7 +26,7 @@ import java.util.List;
 public abstract class MCTSNode<T> {
 
 	public enum NodeType {
-		STOCHASTIC, DETERMINISTIC
+		STOCHASTIC, DETERMINISTIC, ADVERSARIAL
 	};
 
 	private boolean firstTime = true;
@@ -125,6 +125,10 @@ public abstract class MCTSNode<T> {
 
 	public void setFirstTime(boolean firstTime) {
 		this.firstTime = firstTime;
+	}
+	
+	public void init() {
+		
 	}
 
 }
