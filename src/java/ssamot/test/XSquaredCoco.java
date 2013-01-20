@@ -22,7 +22,8 @@ package ssamot.test;
 import ssamot.mcts.ucb.optimisation.ContinuousProblem;
 
 public class XSquaredCoco extends ContinuousProblem {
-
+	double max = Double.NEGATIVE_INFINITY;
+	double min = Double.POSITIVE_INFINITY;
 	@Override
 	public double getFtarget() {
 		// TODO Auto-generated method stub
@@ -33,12 +34,31 @@ public class XSquaredCoco extends ContinuousProblem {
 	public double evaluate(double[] x) {
 		double res = 0;
 		//System.err.println(Arrays.toString(x));
+		
+		
 		for (int i = 0; i < x.length; i++) {
 			//System.err.println(res);
 			res += ((x[i]-0.6)*(x[i]-0.6));
 		}
 		
-		return -res/2.0;
+		double score = res;
+		
+		if (score > max) {
+			max = score;
+		}
+
+		if (score < min) {
+			min = score;
+		}
+
+		if (max == min) {
+			score =  0.0;
+		}
+		else {
+			score = (score - min) / (max - min);
+		}
+		
+		return -score;
 	}
 
 }

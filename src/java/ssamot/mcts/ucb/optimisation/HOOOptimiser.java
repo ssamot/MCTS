@@ -19,7 +19,12 @@
 
 package ssamot.mcts.ucb.optimisation;
 
+import java.util.List;
+
+import com.mxgraph.analysis.mxFibonacciHeap.Node;
+
 import ssamot.mcts.MCTS;
+import ssamot.mcts.StatisticsNode;
 import ssamot.mcts.selectors.ChanceProportional;
 import ssamot.mcts.selectors.ucb.UCBActionSelector;
 
@@ -58,7 +63,7 @@ public class HOOOptimiser extends MCTS<MCTSContinuousNode> {
 
 		//System.out.println("maxDepth = " + hoob.getMaxDepth());
 		MCTSContinuousNode rootNode = new MCTSContinuousNode(minA, maxA,
-				2, -1, 0, hoob.getMaxDepth(), gamma);
+				2, -1, 0, hoob.getMaxDepth()*2, gamma);
 		rootNode.split();
 		rootNode.contId = "root";
 		setRootNode(rootNode);
@@ -67,6 +72,42 @@ public class HOOOptimiser extends MCTS<MCTSContinuousNode> {
 	
 	public double getBestValue() {
 		return bp.getBestValue();
+	}
+	
+	public MCTSContinuousNode getBestNode() {
+		MCTSContinuousNode node = getRootNode();
+		while(true) {
+			List<StatisticsNode> children = node.getChildren();
+			
+			if(children == null) {
+				//if(index == -1) {
+					return node;
+				//}
+			}
+			double max = Double.NEGATIVE_INFINITY;
+			int index = -1;
+			for (int i = 0; i < children.size(); i++) {
+				StatisticsNode cNode = children.get(i);
+				double cVal = cNode.getStatistics().getMean();
+
+				if (cVal >= max) {
+					index = i;
+					max = cVal;
+				}
+			}
+			if(index == -1) {
+				return node;
+			}
+			MCTSContinuousNode bNode = (MCTSContinuousNode) children.get(index);
+			if(bNode.getStatistics().getN()!=0){
+				node = bNode;
+			}
+			else {
+				return node;
+			}
+			
+			
+		}
 	}
 
 	public double[] getBestRootSample() {

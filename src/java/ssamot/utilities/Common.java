@@ -230,5 +230,13 @@ public class Common {
 		return r;
 		
 	}
+	
+	public static double sumArray(short[] array) {
+		double sum = 0;
+		for (short i : array)
+		    sum += i;
+		
+		return sum;
+	}
 
 }

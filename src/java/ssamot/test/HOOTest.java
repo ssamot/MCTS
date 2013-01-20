@@ -53,13 +53,15 @@ public class HOOTest extends TestCase {
 
 		int min = -10;
 		int max = 4;
-		int splitPoints = 2;
+		int gamma = 1;
 
 		HOOOptimiser hoo = new HOOOptimiser(func, dimension, iterations, min,
-				max, splitPoints);
+				max, gamma);
 		hoo.runForSim(iterations);
 		System.out.println(Arrays.toString(hoo.getBestSample()) + ","
 				+ hoo.getBestValue());
+		System.out.println(hoo.getBestNode());
+		
 	}
 
 	
@@ -73,18 +75,19 @@ public class HOOTest extends TestCase {
 
 		int min = -1;
 		int max = 1;
-		int splitPoints = 2;
+		int gamma = 1;
 		MCTS.DEBUG = false;
 		SummaryStatistics stats = new SummaryStatistics();
 		for (int i = 0; i < 2000; i++) {
 			HOOOptimiser hoo = new HOOOptimiser(func, dimension, iterations, min,
-					max, splitPoints);
+					max, gamma);
 			hoo.runForSim(iterations);
 //			System.out.println(Arrays.toString(hoo.getBestSample()) + ","
 //					+ hoo.getBestValue());
 			
 			stats.addValue(hoo.getBestValue());
-			//System.out.println(i);
+			System.out.println(hoo.getBestNode());
+
 		}
 		
 		System.out.println(stats);

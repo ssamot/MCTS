@@ -1,5 +1,7 @@
 package ssamot.visualitation;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,14 +34,33 @@ public class Visualiser extends JFrame {
 			graph.getModel().endUpdate();
 		}
 
-		mxGraphComponent graphComponent = new mxGraphComponent(graph);
+		final mxGraphComponent graphComponent = new mxGraphComponent(graph);
 		getContentPane().add(graphComponent);
+		
+		graphComponent.getGraphControl().addMouseListener(new MouseAdapter()
+		{
+
+			public void mousePressed(MouseEvent e)
+			{
+				Object cell = graphComponent.getCellAt(e.getX(), e.getY());
+
+				if (cell != null)
+				{
+					System.out.println("cell="+graph.getLabel(cell));
+				}
+				
+				
+			}
+			
+			
+		});
 	}
 
 	public void init() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(400, 320);
 		setVisible(true);
+		//graph.
 		mxCodecRegistry.addPackage("ssamot.visualitation");
 		mxCodecRegistry.register(new mxObjectCodec(new MCTSCell()));
 	}
@@ -118,7 +139,7 @@ public class Visualiser extends JFrame {
 		
 	
 		//graph.
-		Thread.sleep(1000);
+		//Thread.sleep(1000);
 
 		// 
 	}
@@ -132,54 +153,5 @@ public class Visualiser extends JFrame {
 		graph.refresh();
 	}
 
-	private void mupdate() {
-
-		// super("Hello, World!");
-
-		Object parent = graph.getDefaultParent();
-
-		graph.getModel().beginUpdate();
-		try {
-			graph.setAutoSizeCells(true);
-			// graph.insertVertex(arg0, arg1, arg2, arg3, arg4, arg5, arg6)
-			Object v1 = graph.insertVertex(parent, null, "Hello", 20, 20, 80,
-					30);
-			Object v2 = graph.insertVertex(parent, null, "World!", 240, 150,
-					80, 30);
-			Object v3 = graph.insertVertex(parent, null, "World!", 240, 150,
-					80, 30);
-			graph.insertEdge(parent, null, "Edge", v1, v2);
-			graph.insertEdge(parent, null, "Edge", v1, v3);
-		} finally {
-			graph.getModel().endUpdate();
-		}
-		mxCompactTreeLayout layout = new mxCompactTreeLayout(graph);
-		layout.execute(graph.getDefaultParent());
-		mxGraphComponent graphComponent = new mxGraphComponent(graph);
-		getContentPane().add(graphComponent);
-
-	}
-
-	private void mupdate2() {
-
-		// super("Hello, World!");
-
-		Object parent = graph.getDefaultParent();
-
-		graph.getModel().beginUpdate();
-		try {
-			graph.setAutoSizeCells(true);
-			// graph.insertVertex(arg0, arg1, arg2, arg3, arg4, arg5, arg6)
-			Object v1 = graph
-					.insertVertex(parent, null, "dfdf", 30, 30, 90, 40);
-
-		} finally {
-			graph.getModel().endUpdate();
-		}
-
-		mxGraphComponent graphComponent = new mxGraphComponent(graph);
-		getContentPane().add(graphComponent);
-
-	}
-
+	
 }

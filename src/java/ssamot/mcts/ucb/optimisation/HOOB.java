@@ -23,7 +23,7 @@ import ssamot.mcts.selectors.ucb.UCB;
 
 public class HOOB extends UCB<MCTSContinuousNode> {
 
-	private double UCB1_C = 1.0;
+	private double UCB1_C = 1;
 	private double UCB_MINIMUM_ITERATIONS = 1;
 	private double alpha = 2;
 	// private

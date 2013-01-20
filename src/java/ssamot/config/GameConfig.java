@@ -26,7 +26,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class GameConfig {
-	private  static String runTimeDirectory =  "./runtime/";
+	private  static String[] configDirectory =  new String[]{"./runtime/","./"};
 	private  int runTimeThreads;
 	
 	
@@ -34,6 +34,7 @@ public class GameConfig {
 	
 	private double ucb1C = 0.5;
 	private double ucb1MinimumIterations = 1;
+	private String runTimeDirectory= "./";
 
 	
 
@@ -44,17 +45,24 @@ public class GameConfig {
 	public static GameConfig getInstance() {
 		if(config==null) {
 			Properties prop = new Properties();
-			String fileName = runTimeDirectory + "config/main.config";
+			
 			InputStream is = null;
 			
 			config = new GameConfig();
 			
-			try {
-				is = new FileInputStream(fileName);
-			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			for (int i = 0; i < configDirectory.length; i++) {
+				try {
+					String fileName = configDirectory[i] + "config/main.config";
+					System.out.println("Searching for Config at: " + fileName);
+					is = new FileInputStream(fileName);
+					System.out.println("Found Config at: " + fileName);
+					break;
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					//e1.printStackTrace();
+				}
 			}
+			
 
 			try {
 				prop.load(is);
@@ -62,7 +70,7 @@ public class GameConfig {
 				config.runTimeThreads = getIntProperty(prop,"runtime.threads");
 				config.ucb1C = getDoubleProperty(prop,"ucb1.C");
 				config.ucb1MinimumIterations = getDoubleProperty(prop,"ucb1.minimumiterations");
-
+				config.runTimeDirectory = getStringProperty(prop,"runtime.directory");
 				
 				
 				
@@ -81,14 +89,18 @@ public class GameConfig {
 	
 	private static int getIntProperty(Properties prop,String name) {
 		return  Integer.parseInt((prop
-				.getProperty("runtime.threads").trim()));
+				.getProperty(name).trim()));
 	}
 	
 	private static double getDoubleProperty(Properties prop,String name) {
 		return Double.parseDouble((prop
-				.getProperty("runtime.threads").trim()));
+				.getProperty(name).trim()));
 	}
 
+	private static String getStringProperty(Properties prop,String name) {
+		return ((prop
+				.getProperty(name).trim()));
+	}
 
 
 	public  int getRunTimeThreads() {

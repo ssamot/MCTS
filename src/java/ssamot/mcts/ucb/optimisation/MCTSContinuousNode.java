@@ -130,9 +130,9 @@ public class MCTSContinuousNode extends StatisticsNode {
 	}
 
 	public void split() {
-		//System.out.println(depth);
+		// System.out.println(depth);
 		if (depth > maxDepth) {
-			
+
 			return;
 
 		}
@@ -147,24 +147,36 @@ public class MCTSContinuousNode extends StatisticsNode {
 
 			if (gamma < 1.0) {
 				double[] splitProbs = new double[min.length];
-				double sum=0;
+				double sum = 0;
 				for (int i = 0; i < min.length; i++) {
 					splitProbs[i] = Math.pow(gamma, i);
-					sum+=splitProbs[i];
+					sum += splitProbs[i];
 				}
-				
+
 				for (int i = 0; i < min.length; i++) {
-					splitProbs[i] = splitProbs[i]/sum;
-					
+					splitProbs[i] = splitProbs[i] / sum;
+
 				}
 				splitDim = Common.pickRandomProportionally(splitProbs);
-				//System.out.println(Arrays.toString(splitProbs));
-				//System.out.println(splitDim);
+				// System.out.println(Arrays.toString(splitProbs));
+				// System.out.println(splitDim);
 			} else {
 				splitDim = twister.nextInt(min.length);
+
+				double maxd = Double.NEGATIVE_INFINITY;
+				int maxd_i = -1;
+				for (int i = 0; i < min.length; i++) {
+					double d = Math.abs(max[i] - min[i]);
+					if (d > maxd) {
+						maxd = d;
+						maxd_i = i;
+					}
+				}
+				splitDim = maxd_i;
+
 			}
-			//splitDim = twister.nextInt(min.length);
-			//System.out.println(splitDim);
+			// splitDim = twister.nextInt(min.length);
+			// System.out.println(splitDim);
 			double interval = Math.abs(max[splitDim] - min[splitDim])
 					/ (double) splitPoints;
 
@@ -277,8 +289,9 @@ public class MCTSContinuousNode extends StatisticsNode {
 
 	@Override
 	public String toString() {
-		return "Av [ac=" + String.format("%1.5f", actionStatistics.getMean())
-				+ "," + contId + "]";
+		return "MCTSContinuousNode [min=" + Arrays.toString(min) + ", max="
+				+ Arrays.toString(max) + ", depth=" + depth + ", maxDepth="
+				+ maxDepth + "]";
 	}
 
 	public void setB(double b) {

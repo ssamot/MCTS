@@ -51,8 +51,8 @@ public class MCTSCell extends mxCell {
 		this.setId(node.hashCode() + " ");
 		//System.out.println(node.hashCode());
 		this.setVertex(true);
-		this.setConnectable(true);
-		mxGeometry geometry = new mxGeometry(20, 20, 40, 80);
+		this.setConnectable(false);
+		mxGeometry geometry = new mxGeometry(300, 10, 60, 60);
         geometry.setRelative(false);
         this.setGeometry(geometry);
         this.setStyle("shape=ellipse");
@@ -64,7 +64,8 @@ public class MCTSCell extends mxCell {
 		java.text.DecimalFormat df = new
 				java.text.DecimalFormat("###.####");
 		String v = (df.format(node.getStatistics().getMean()));
-		 this.setValue(playerId + ": " + ",\n" +  (int) node.getStatistics().getN() + ",\n" + v  );
+		this.setValue(playerId + ": " + ",\n" +  (int) node.getStatistics().getN() + ",\n" + v  );
+	
 	}
 	
 	public int getVisits() {
