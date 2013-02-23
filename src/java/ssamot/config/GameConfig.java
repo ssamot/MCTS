@@ -27,6 +27,7 @@ import java.util.Properties;
 
 public class GameConfig {
 	private  static String[] configDirectory =  new String[]{"./runtime/","./"};
+	private static String confDirectoryName = "config";
 	private  int runTimeThreads;
 	
 	
@@ -34,7 +35,16 @@ public class GameConfig {
 	
 	private double ucb1C = 0.5;
 	private double ucb1MinimumIterations = 1;
-	private String runTimeDirectory= "./";
+	private String runTimeDirectory= ".";
+	
+	private String CMAConfigFile;
+	
+
+	
+
+	public String getCMAConfigFile() {
+		return CMAConfigFile;
+	}
 
 	
 
@@ -52,7 +62,7 @@ public class GameConfig {
 			
 			for (int i = 0; i < configDirectory.length; i++) {
 				try {
-					String fileName = configDirectory[i] + "config/main.config";
+					String fileName = configDirectory[i] + "/" + confDirectoryName + "/main.config";
 					System.out.println("Searching for Config at: " + fileName);
 					is = new FileInputStream(fileName);
 					System.out.println("Found Config at: " + fileName);
@@ -71,7 +81,7 @@ public class GameConfig {
 				config.ucb1C = getDoubleProperty(prop,"ucb1.C");
 				config.ucb1MinimumIterations = getDoubleProperty(prop,"ucb1.minimumiterations");
 				config.runTimeDirectory = getStringProperty(prop,"runtime.directory");
-				
+				config.CMAConfigFile = config.getRunTimeDirectory() + "/" + confDirectoryName + "/CMAEvolutionStrategy.properties";
 				
 				
 				System.out.println(config);

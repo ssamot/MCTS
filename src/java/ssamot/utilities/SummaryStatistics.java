@@ -49,7 +49,7 @@ public class SummaryStatistics implements Serializable {
 	private double sumsq;
 	private double min;
 	private double max;
-
+	
 	private double mean;
 	private double sd;
 
@@ -77,6 +77,7 @@ public class SummaryStatistics implements Serializable {
 		// be that number
 		min = Double.POSITIVE_INFINITY;
 		max = Double.NEGATIVE_INFINITY;
+		
 		// System.out.println("Finished Creating SS");
 		valid = false;
 
@@ -98,6 +99,8 @@ public class SummaryStatistics implements Serializable {
 		max = Double.NEGATIVE_INFINITY;
 	}
 
+	
+
 	public double getMax() {
 		return max;
 	}
@@ -109,6 +112,7 @@ public class SummaryStatistics implements Serializable {
 	public double getMean() {
 		if (!valid)
 			computeStats();
+	
 		return mean;
 	}
 
@@ -202,7 +206,7 @@ public class SummaryStatistics implements Serializable {
 
 	}
 
-	public void addValue(double d) {
+	public void  addValue(double d) {
 		n++;
 		if (values != null) {
 			values.add(d);
@@ -214,26 +218,26 @@ public class SummaryStatistics implements Serializable {
 		valid = false;
 	}
 
-	// adding a fraction of a trial!!!!
-	public void addValue(double d, double fraction) {
-
-		n += fraction;
-		sum += d;
-		sumsq += d * d;
-		min = Math.min(min, d);
-		max = Math.max(max, d);
-		valid = false;
-	}
-
-	public void removeValue(double d, double fraction) {
-
-		n -= fraction;
-		sum -= d;
-		sumsq -= d * d;
-		min = Math.min(min, d);
-		max = Math.max(max, d);
-		valid = false;
-	}
+//	// adding a fraction of a trial!!!!
+//	public void addValue(double d, double fraction) {
+//
+//		n += fraction;
+//		sum += d;
+//		sumsq += d * d;
+//		min = Math.min(min, d);
+//		max = Math.max(max, d);
+//		valid = false;
+//	}
+//
+//	public void removeValue(double d, double fraction) {
+//
+//		n -= fraction;
+//		sum -= d;
+//		sumsq -= d * d;
+//		min = Math.min(min, d);
+//		max = Math.max(max, d);
+//		valid = false;
+//	}
 
 	// public double[] getConfidenceInterval(double significance) {
 	// computeStats();

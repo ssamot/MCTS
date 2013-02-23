@@ -1,13 +1,14 @@
 package ssamot.mcts.ucb.optimisation;
 
-import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 
 public class LockingContinuousProblem extends ContinuousProblem {
 	//private final ReentrantLock lock = new ReentrantLock();
 	
-	private SynchronousQueue<Object> lock = new SynchronousQueue<Object>(true);
-
+	//private SynchronousQueue<Object> lock = new SynchronousQueue<Object>(true);
+	final CyclicBarrier barrier = new CyclicBarrier(2);
 	private double[] x;
 
 	private double score;
@@ -35,8 +36,12 @@ public class LockingContinuousProblem extends ContinuousProblem {
 
 	public void unlock() {
 		try {
-			lock.take();
+			barrier.await();
+			barrier.reset();
 		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BrokenBarrierException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -46,7 +51,16 @@ public class LockingContinuousProblem extends ContinuousProblem {
 	public double evaluate(double[] x) {
 		// TODO Auto-generated method stub
 		this.x = x.clone();
-		lock.add(new Object());
+		//lock.add(new Object());
+		try {
+			barrier.await();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BrokenBarrierException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return score;
 	}

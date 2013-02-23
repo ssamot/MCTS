@@ -34,7 +34,7 @@ public class ChanceProportional<T extends MCTSNode> implements Selector<T> {
 		List<T> children = node.getChildren();
 		int childrenSize = children.size();
 
-		if (children.get(0).getType() == NodeType.STOCHASTIC) {
+	//	if (children.get(0).getType() == NodeType.STOCHASTIC) {
 
 			int index = -1;
 
@@ -57,8 +57,8 @@ public class ChanceProportional<T extends MCTSNode> implements Selector<T> {
 				return children.get(generator.nextInt(children.size()));
 			}
 			return children.get(index);
-		} else {
-			return null;
-		}
+	//	} else {
+		//	return null;
+	//	}
 	}
 }

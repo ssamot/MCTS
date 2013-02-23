@@ -179,7 +179,7 @@ public class MCTS<N extends MCTSNode> {
 		int totalSimulations = 0;
 
 		for (; totalSimulations < simulations; totalSimulations++) {
-			// System.err.println(totalSimulations);
+			//System.err.println(totalSimulations);
 			rootNode.init();
 			playOneSequence(rootNode);
 		}

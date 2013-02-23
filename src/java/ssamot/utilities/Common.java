@@ -20,8 +20,10 @@
 package ssamot.utilities;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import ec.util.MersenneTwister;
 
@@ -238,5 +240,31 @@ public class Common {
 		
 		return sum;
 	}
+	
+	public static double sumArray(double[] array, int offset) {
+		double sum = 0;
+		for (int i = offset; i < array.length; i++) {
+			sum+=i;
+		}
+		
+		return sum;
+	}
+	
+	 public static void permuteString(String beginningString, String endingString, Set<String> perms, int max) {
+		    if (endingString.length() <= 1) {
+		      //System.out.println(beginningString + endingString);
+		    	perms.add((beginningString + endingString).substring(0, max));
+		    }
+		    else
+		      for (int i = 0; i < endingString.length(); i++) {
+		        try {
+		          String newString = endingString.substring(0, i) + endingString.substring(i + 1);
+
+		          permuteString(beginningString + endingString.charAt(i), newString,perms,max);
+		        } catch (StringIndexOutOfBoundsException exception) {
+		          exception.printStackTrace();
+		        }
+		      }
+		  }
 
 }

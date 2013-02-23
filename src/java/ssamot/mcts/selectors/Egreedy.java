@@ -23,7 +23,7 @@ import java.util.List;
 
 import ssamot.mcts.StatisticsNode;
 
-public class Egreedy implements Selector<StatisticsNode> {
+public class Egreedy<T extends StatisticsNode > implements Selector<StatisticsNode> {
     
     public static final double E = 0.2;
     java.util.Random generator = new java.util.Random();

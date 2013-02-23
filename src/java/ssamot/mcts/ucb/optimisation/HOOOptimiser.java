@@ -63,7 +63,7 @@ public class HOOOptimiser extends MCTS<MCTSContinuousNode> {
 
 		//System.out.println("maxDepth = " + hoob.getMaxDepth());
 		MCTSContinuousNode rootNode = new MCTSContinuousNode(minA, maxA,
-				2, -1, 0, hoob.getMaxDepth()*2, gamma);
+				2, -1, 0, (int) (hoob.getMaxDepth()*1.5), gamma);
 		rootNode.split();
 		rootNode.contId = "root";
 		setRootNode(rootNode);

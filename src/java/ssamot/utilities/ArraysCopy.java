@@ -30,6 +30,12 @@ public class ArraysCopy {
         }
     }
     
+    public static void multiArrayCopy(double[][] source, double[][] destination) {
+        for (int a = 0; a < source.length; a++) {
+            System.arraycopy(source[a], 0, destination[a], 0, source[a].length);
+        }
+    }
+    
 //    public static void multiArrayCopy(double[][] source, double[][] destination) {
 //        
 //        for (int a = 0; a < source.length; a++) {

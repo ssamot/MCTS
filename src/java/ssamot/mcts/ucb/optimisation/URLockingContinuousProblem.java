@@ -1,8 +1,8 @@
 package ssamot.mcts.ucb.optimisation;
 
 public class URLockingContinuousProblem extends LockingContinuousProblem {
-	double max = Double.NEGATIVE_INFINITY;
-	double min = Double.POSITIVE_INFINITY;
+	double max = 20;
+	double min = -20;
 
 	@Override
 	public void setScore(double score) {
