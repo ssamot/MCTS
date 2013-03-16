@@ -45,8 +45,8 @@ public class SummaryStatistics implements Serializable {
 	// Double("-1490108905720833569").longValue();
 	// protected long serialVersionUID = 123;
 	public String name; // defaults to ""
-	private double sum;
-	private double sumsq;
+	protected double sum;
+	protected double sumsq;
 	private double min;
 	private double max;
 	
@@ -56,8 +56,8 @@ public class SummaryStatistics implements Serializable {
 	// trick class loader into loading this now
 	// private static StatisticalTests dummy = new StatisticalTests();
 
-	double n;
-	boolean valid;
+	protected double n;
+	protected boolean valid;
 	ArrayList<Double> values;
 	private double variance;
 
@@ -172,12 +172,10 @@ public class SummaryStatistics implements Serializable {
 		return n;
 	}
 
-	public void setN(int n) {
-		this.n = n;
-		valid = false;
-	}
-
-	public double stdErr() {
+	public double getStdErr() {
+		if(n == 0 ) {
+			return Integer.MAX_VALUE;
+		}
 		return getStandardDeviation() / Math.sqrt(n);
 	}
 
@@ -218,52 +216,35 @@ public class SummaryStatistics implements Serializable {
 		valid = false;
 	}
 
-//	// adding a fraction of a trial!!!!
-//	public void addValue(double d, double fraction) {
-//
-//		n += fraction;
-//		sum += d;
-//		sumsq += d * d;
-//		min = Math.min(min, d);
-//		max = Math.max(max, d);
-//		valid = false;
-//	}
-//
-//	public void removeValue(double d, double fraction) {
-//
-//		n -= fraction;
-//		sum -= d;
-//		sumsq -= d * d;
-//		min = Math.min(min, d);
-//		max = Math.max(max, d);
-//		valid = false;
-//	}
 
-	// public double[] getConfidenceInterval(double significance) {
-	// computeStats();
-	// TDistributionImpl d = new TDistributionImpl(n-1);
-	// double coeff = 0;
-	// try {
-	// coeff = d.inverseCumulativeProbability((significance+1)/2);
-	// } catch (MathException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// double[] confidenceIntervals = new double[2];
-	// //System.out.println(coeff);
-	// confidenceIntervals[0] = getMean() - coeff *
-	// getStandardDeviation()/Math.sqrt(n);
-	// confidenceIntervals[1] = getMean() + coeff *
-	// getStandardDeviation()/Math.sqrt(n);
-	// //double hi = xbar + 1.96 * stddev;
-	// return confidenceIntervals;
-	// }
+	public SummaryStatistics mergeStatistics(SummaryStatistics[] statistics, double[] weights) {
+	
+		SummaryStatistics stats = new SummaryStatistics();
+		
+		double s_n = 0;
+		double s_sum = 0;
+		double s_sumsq = 0;
+		
+		for (int i = 0; i < statistics.length; i++) {
+			s_n =statistics[i].n*weights[i];
+			s_sum =statistics[i].sum*weights[i];
+			s_sumsq = statistics[i].sumsq*weights[i];
+		}
+		
+		stats.n = (int) s_n;
+		stats.sum = s_sum;
+		stats.sumsq = s_sumsq;
+		stats.valid = false;
+		
+		return stats;
+		
+	}
 
 	public String toString() {
 		String s = (name == null) ? "" : name + "\n";
 		s += " min = " + getMin() + "\n" + " max = " + getMax() + "\n"
 				+ " ave = " + getMean() + "\n" + " sd  = "
-				+ getStandardDeviation() + "\n" + " se  = " + stdErr() + "\n"
+				+ getStandardDeviation() + "\n" + " se  = " + getStdErr() + "\n"
 				+ " sum  = " + sum + "\n" + " sumsq  = " + sumsq + "\n"
 				+ " n   = " + n;
 		return s;

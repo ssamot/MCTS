@@ -22,7 +22,6 @@ package ssamot.mcts.selectors;
 import java.util.List;
 
 import ssamot.mcts.MCTSNode;
-import ssamot.mcts.MCTSNode.NodeType;
 
 public class ChanceProportional<T extends MCTSNode> implements Selector<T> {
 

@@ -1,6 +1,5 @@
 package ssamot.visualitation;
 
-import ssamot.mcts.MCTSNode;
 import ssamot.mcts.StatisticsNode;
 
 import com.mxgraph.model.mxCell;

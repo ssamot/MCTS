@@ -16,6 +16,9 @@ public class ShortArrayKey implements Serializable{
 		this.key = key;
 	}
 
+	public ShortArrayKey() {
+		
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

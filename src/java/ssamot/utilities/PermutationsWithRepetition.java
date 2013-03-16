@@ -25,8 +25,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 Retrieved from: http://en.literateprograms.org/Permutations_with_repetition_(Java)?oldid=11971
 */
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PermutationsWithRepetition {
 	private String a;

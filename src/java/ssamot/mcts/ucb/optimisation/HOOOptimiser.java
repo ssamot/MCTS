@@ -21,8 +21,6 @@ package ssamot.mcts.ucb.optimisation;
 
 import java.util.List;
 
-import com.mxgraph.analysis.mxFibonacciHeap.Node;
-
 import ssamot.mcts.MCTS;
 import ssamot.mcts.StatisticsNode;
 import ssamot.mcts.selectors.ChanceProportional;

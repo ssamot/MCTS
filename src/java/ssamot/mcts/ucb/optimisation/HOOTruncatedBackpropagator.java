@@ -21,8 +21,6 @@ package ssamot.mcts.ucb.optimisation;
 
 import java.util.List;
 
-import ssamot.mcts.MCTSNode;
-import ssamot.mcts.StatisticsNode;
 import ssamot.mcts.backpropagators.Backpropagator;
 
 public class HOOTruncatedBackpropagator implements

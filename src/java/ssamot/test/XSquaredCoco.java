@@ -41,24 +41,24 @@ public class XSquaredCoco extends ContinuousProblem {
 			res += ((x[i]-0.6)*(x[i]-0.6));
 		}
 		
-		double score = res;
+		double score = -res;
 		
-		if (score > max) {
-			max = score;
-		}
-
-		if (score < min) {
-			min = score;
-		}
-
-		if (max == min) {
-			score =  0.0;
-		}
-		else {
-			score = (score - min) / (max - min);
-		}
-		
-		return -score;
+//		if (score > max) {
+//			max = score;
+//		}
+//
+//		if (score < min) {
+//			min = score;
+//		}
+//
+//		if (max == min) {
+//			score =  0.0;
+//		}
+//		else {
+//			score = (score - min) / (max - min);
+//		}
+		//System.out.println(score);
+		return score;
 	}
 
 }
